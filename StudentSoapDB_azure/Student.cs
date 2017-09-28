@@ -7,9 +7,9 @@ namespace StudentSoapDB_azure
 {
     public class Student
     {
-        public int Id { get; set; }
+        public int StudentId { get; set; }
 
-        public string Name { get; set; }
+        public string StudentName { get; set; }
 
     }
 }

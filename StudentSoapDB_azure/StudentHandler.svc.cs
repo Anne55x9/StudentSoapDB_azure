@@ -21,7 +21,7 @@ namespace StudentSoapDB_azure
 
         public IList<Student> GetAllStudents()
         {
-            const string selectAllStudent = "select * from student order by name";
+            const string selectAllStudent = "select * from student order by studentid";
 
             using (SqlConnection databaseConnection = new SqlConnection(connectionString))
             {
@@ -48,21 +48,83 @@ namespace StudentSoapDB_azure
             string name = reader.GetString(1);
             Student student = new Student
             {
-                Id = id,
-                Name = name,
+                StudentId = id,
+                StudentName = name,
             };
             return student;
         }
 
         public Student GetStudentById(int id)
         {
-            throw new NotImplementedException();
+            const string selectStudent = "select * from student where studentid=@studentid";
+            using (SqlConnection databaseConnection = new SqlConnection(connectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(selectStudent,databaseConnection))
+                {
+                    selectCommand.Parameters.AddWithValue("@studentid", id);
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        if (!reader.HasRows)
+                        {
+                            return null;
+                        }
+                        reader.Read();
+                        Student student = ReadStudent((reader));
+                        return student;
+                    }
+                }
+            }
         }
 
 
-        public IList<Student> GetStudentsByName(string name)
+        public Student GetStudentByName(string name)
         {
-            throw new NotImplementedException();
+            string selectStr = "select * from student where studentname LIKE @studentname";
+            using (SqlConnection databaseConnection = new SqlConnection(connectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(selectStr,databaseConnection))
+                {
+                    selectCommand.Parameters.AddWithValue("@studentname", name);
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        if (!reader.HasRows)
+                        {
+                            return null;
+                        }
+                        reader.Read();
+                        Student st = ReadStudent(reader);
+                        return st;
+
+
+                    }
+                }
+            }
+        }
+
+        public void AddStudent(int id, string name)
+        {
+            const string insertStudent = "insert into student (studentid, studentname) values (@studentid, @studentname)";
+            using (SqlConnection databaseConnection = new SqlConnection(connectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand insertCommand = new SqlCommand(insertStudent, databaseConnection))
+                {
+                    insertCommand.Parameters.AddWithValue("@studentid", id);
+                    insertCommand.Parameters.AddWithValue("@studentname", name);
+
+                    using (SqlDataReader reader = insertCommand.ExecuteReader())
+                    {
+                        List<Student> studentList = new List<Student>();
+                        while (reader.Read())
+                        {
+                            Student st = ReadStudent(reader);
+                            studentList.Add(st);
+                        }
+                    }
+                }
+            }
         }
     }
 }

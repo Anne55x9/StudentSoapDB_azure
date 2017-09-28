@@ -19,7 +19,10 @@ namespace StudentSoapDB_azure
         Student GetStudentById(int id);
 
         [OperationContract]
-        IList<Student> GetStudentsByName(string name);
+        Student GetStudentByName(string name);
+
+        [OperationContract]
+        void AddStudent(int id, string name);
 
     }
 
