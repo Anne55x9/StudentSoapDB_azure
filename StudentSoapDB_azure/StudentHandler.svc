@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="StudentSoapDB_azure.StudentHandler" CodeBehind="StudentHandler.svc.cs" %>
