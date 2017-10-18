@@ -24,6 +24,12 @@ namespace StudentSoapDB_azure
         [OperationContract]
         void AddStudent(int id, string name);
 
+        [OperationContract]
+        void DeleteStudentById(int Id);
+
+        [OperationContract]
+        void UpdateStudent(string id, string name);
+
     }
 
 

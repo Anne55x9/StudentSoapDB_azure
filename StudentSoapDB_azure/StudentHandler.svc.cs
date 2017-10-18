@@ -126,5 +126,38 @@ namespace StudentSoapDB_azure
                 }
             }
         }
+
+        public void DeleteStudentById(int id)
+        {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "DELETE FROM STUDENT WHERE StudentId = @StudentId";
+
+                    SqlCommand deleteCommand = new SqlCommand(sql, conn);
+
+                    deleteCommand.Parameters.AddWithValue("@StudentId", id);
+                    deleteCommand.ExecuteNonQuery();
+                }
+        }
+
+        public void UpdateStudent(string id, string name)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "UPDATE STUDENT SET StudentName = @StudentName WHERE StudentId = @StudentId";
+
+                //StudentId = @StudentId,
+                SqlCommand updateCommand = new SqlCommand(sql, conn);
+
+                updateCommand.Parameters.AddWithValue("@StudentId", Int32.Parse(id));
+
+                updateCommand.Parameters.AddWithValue("@StudentName", name);
+
+                updateCommand.ExecuteNonQuery();
+
+            }
+        }
     }
 }
